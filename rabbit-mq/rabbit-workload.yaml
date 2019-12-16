@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: notyfyd-rabbit-mq
+spec:
+ selector:
+  matchLabels:
+   app: notyfyd-rabbit-mq
+ replicas: 1
+ template: 
+  metadata:
+    name: notyfyd-rabbit-mq
+    labels:
+      app: notyfyd-rabbit-mq
+  spec:
+   containers:
+   - name: notyfyd-rabbit-mq
+     image: vinusagar/rabbit-stomp:0.1
+     
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: notyfyd-rabbit-mq
+spec:
+ selector: 
+  app: notyfyd-rabbit-mq
+ ports:
+  - name: amqp
+    port: 5672
+    nodePort: 30672
+  - name: http
+    port: 15672
+    nodePort: 31672
+  - name: sock
+    port: 15674
+    nodePort: 31674
+ type: NodePort

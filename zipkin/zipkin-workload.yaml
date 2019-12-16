@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notyfyd-zipkin
+spec:
+  selector:
+    matchLabels:
+      app: notyfyd-zipkin
+  replicas: 1
+  template:
+    metadata:
+      name: notyfyd-zipkin
+      labels:
+        app: notyfyd-zipkin
+    spec:
+      containers:
+        - name: notyfyd-zipkin
+          image:  openzipkin/zipkin:latest
+          env:
+            - name: RABBIT_URI
+              value: amqp://notyfyd-rabbit-mq
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notyfyd-zipkin
+spec:
+  selector:
+    app: notyfyd-zipkin
+  ports:
+    - name: zipkin
+      port: 9411
+      nodePort: 30411
+  type: NodePort
