@@ -42,7 +42,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 
 RUN export JAVA_HOME
 
-RUN wget http://mirrors.gigenet.com/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz
+RUN wget http://mirrors.gigenet.com/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 RUN apt-get update -y && apt-get install maven -y
 
 
