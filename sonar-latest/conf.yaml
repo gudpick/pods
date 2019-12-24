@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: conf
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: conf
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+      storage: 3Gi
+  hostPath: 
+    path: "/opt/sonar/conf/"
+    type: DirectoryOrCreate

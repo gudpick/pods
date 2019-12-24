@@ -16,7 +16,7 @@ spec:
         image: kibana:7.3.2
         env:
         - name: ELASTICSEARCH_URL
-          value: http://10.244.0.115:9200
+          value: http://10.96.201.241:9200
         - name: XPACK_SECURITY_ENABLED
           value: "true"
         ports:

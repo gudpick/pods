@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: sonarqube
+spec:
+  selector:
+    matchLabels:
+     app: sonarqube
+  replicas: 1
+  template:
+    metadata:
+      name: sonarqube
+      labels:
+        app: sonarqube
+    spec:
+      containers:
+      - name: sonarqube
+        image: sonarqube:latest
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 2048Mi
+          limits:
+            cpu: 6000m
+            memory: 4096Mi
+        env:
+          - name: sonar.jdbc.username
+            value: "postgres"
+          - name: sonar.jdbc.url
+            value: "jdbc:postgresql://10.96.134.13:5432/sonarqube"
+          - name: sonar.jdbc.password
+            value: "root"
+        ports:
+          - containerPort: 9000
+            protocol: TCP
+        volumeMounts:
+        - mountPath: /opt/sonarqube/data/
+          name: data
+        - mountPath: /opt/sonarqube/extensions/
+          name: extensions        
+        - mountPath: /opt/sonarqube/conf
+          name: conf
+        - mountPath: /opt/sonarqube/logs/
+          name: logs
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+            claimName: data
+      - name: extensions
+        persistentVolumeClaim:
+            claimName: extensions
+      - name: conf
+        persistentVolumeClaim:
+            claimName: conf
+      - name: logs
+        persistentVolumeClaim:
+            claimName: logs
+       
+       
+        
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: sonarqube
+spec:
+    selector: 
+       app: sonarqube
+    ports:
+      - name: sonar
+        port: 9000
+        nodePort: 30009
+    type: NodePort
