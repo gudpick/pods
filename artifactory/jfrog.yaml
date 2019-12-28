@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: artifactory
+spec:
+  selector:
+    matchLabels:
+     app: artifactory
+  replicas: 1
+  template:
+    metadata:
+      name: artifactory
+      labels:
+        app: artifactory
+    spec:
+      containers:
+      - name: artifactory
+        image: docker.bintray.io/jfrog/artifactory-oss:latest
+        env:
+        ports:
+          - containerPort: 8081
+            protocol: TCP
+        volumeMounts:
+        - mountPath: /var/opt/jfrog/artifactory
+          name: artifactory-data      
+      volumes:
+      - name: artifactory-data
+        persistentVolumeClaim:
+            claimName: artifactory-data
+      - name: sonar-extensions
+      
+        # resources:
+        #   requests:
+        #     cpu: 2000m
+        #     memory: 2048Mi
+        #   limits:
+        #     cpu: 6000m
+        #     memory: 4096Mi
+       
+        
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: artifactory
+spec:
+    selector: 
+       app: artifactory
+    ports:
+      - name: sonar
+        port: 8081
+        nodePort: 30081
+    type: NodePort
+     

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: artifactory-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: artifactory-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+      storage: 20Gi
+  hostPath: 
+    path: "/var/opt/jfrog/artifactory"
+    type: DirectoryOrCreate
